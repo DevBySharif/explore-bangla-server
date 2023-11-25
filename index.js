@@ -29,6 +29,7 @@ async function run() {
     
     const packageCollection=client.db('exploreBanglaDB').collection('tourPackages')
     const guidesCollection=client.db('exploreBanglaDB').collection('tourGuides')
+    const storiesCollection=client.db('exploreBanglaDB').collection('touristStories')
 
 
     app.get('/packages',async(req,res)=>{
@@ -37,6 +38,10 @@ async function run() {
     })
     app.get('/guides',async(req,res)=>{
         const result = await guidesCollection.find().toArray()
+        res.send(result)
+    })
+    app.get('/stories',async(req,res)=>{
+        const result = await storiesCollection.find().toArray()
         res.send(result)
     })
 
