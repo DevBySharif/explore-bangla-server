@@ -28,10 +28,15 @@ async function run() {
     await client.connect();
     
     const packageCollection=client.db('exploreBanglaDB').collection('tourPackages')
+    const guidesCollection=client.db('exploreBanglaDB').collection('tourGuides')
 
 
     app.get('/packages',async(req,res)=>{
         const result = await packageCollection.find().toArray()
+        res.send(result)
+    })
+    app.get('/guides',async(req,res)=>{
+        const result = await guidesCollection.find().toArray()
         res.send(result)
     })
 
