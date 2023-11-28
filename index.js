@@ -120,6 +120,17 @@ async function run() {
       const result = await usersCollection.updateOne(filter,updatedDoc)
       res.send(result)
     })
+    app.patch('/users/guide/:id',verifyToken,verifyAdmin,async(req,res)=>{
+      const id=req.params.id
+      const filter={_id:new ObjectId(id)}
+      const updatedDoc={
+        $set:{
+          role:'guide'
+        }
+      }
+      const result = await usersCollection.updateOne(filter,updatedDoc)
+      res.send(result)
+    })
 
     app.get('/users/admin/:email',verifyToken,async(req,res)=>{
       const email=req.params.email
@@ -134,6 +145,20 @@ async function run() {
         admin = user?.role === 'admin'
       }
       res.send({admin})
+    })
+    app.get('/users/guide/:email',verifyToken,async(req,res)=>{
+      const email=req.params.email
+      console.log(req.decoded.email);
+      if(email !== req.decoded.email){
+        return req.status(403).send({message:'forbidden access'})
+      }
+      const query={email:email}
+      const user= await usersCollection.findOne(query)
+      let guide = false
+      if(user){
+        guide = user?.role === 'guide'
+      }
+      res.send({guide})
     })
 
     app.delete('/users/:id',async(req,res)=>{
