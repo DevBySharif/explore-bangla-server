@@ -32,6 +32,8 @@ async function run() {
     const guidesCollection=client.db('exploreBanglaDB').collection('tourGuides')
     const storiesCollection=client.db('exploreBanglaDB').collection('touristStories')
     const usersCollection=client.db('exploreBanglaDB').collection('users')
+    const bookingsCollection=client.db('exploreBanglaDB').collection('bookings')
+    const wishlistCollection=client.db('exploreBanglaDB').collection('wishlist')
 
 
     // jwt related api
@@ -86,7 +88,37 @@ async function run() {
         const result = await storiesCollection.find().toArray()
         res.send(result)
     })
+    
+    // wishlist api
+    app.post('/wishlist',async(req,res)=>{
+      const wishlist=req.body
+      console.log(wishlist);
+      const result=await wishlistCollection.insertOne(wishlist)
+      res.send(result)
+    })
+    app.get('/wishlist',async(req,res)=>{
+      const result = await wishlistCollection.find().toArray()
+      res.send(result)
+  })
 
+  app.delete('/wishlist/:id',async(req,res)=>{
+    const userId = req.params.id
+    const query={_id:new ObjectId(userId)}
+    const result = await wishlistCollection.deleteOne(query)
+    res.send(result)
+  })
+
+
+    // booking related api
+    app.post('/bookings',async(req,res)=>{
+      const bookingData=req.body
+      const result=await bookingsCollection.insertOne(bookingData)
+      res.send(result)
+    })
+    app.get('/bookings',async(req,res)=>{
+      const result = await bookingsCollection.find().toArray()
+      res.send(result)
+  })
 
     // user related api
     app.post('/users',async(req,res)=>{
