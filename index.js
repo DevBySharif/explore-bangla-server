@@ -84,6 +84,7 @@ async function run() {
         const result = await guidesCollection.find().toArray()
         res.send(result)
     })
+    
     app.get('/stories',async(req,res)=>{
         const result = await storiesCollection.find().toArray()
         res.send(result)
@@ -118,6 +119,28 @@ async function run() {
     app.get('/bookings',async(req,res)=>{
       const result = await bookingsCollection.find().toArray()
       res.send(result)
+  })
+  app.patch('/assigned/tour/accept:id',async(req,res)=>{
+    const id=req.params.id
+    const filter={_id:new ObjectId(id)}
+    const updatedDoc={
+      $set:{
+        status:'Accepted'
+      }
+    }
+    const result = await bookingsCollection.updateOne(filter,updatedDoc)
+    res.send(result)
+  })
+  app.patch('/assigned/tour/reject:id',async(req,res)=>{
+    const id=req.params.id
+    const filter={_id:new ObjectId(id)}
+    const updatedDoc={
+      $set:{
+        status:'Rejected'
+      }
+    }
+    const result = await bookingsCollection.updateOne(filter,updatedDoc)
+    res.send(result)
   })
 
     // user related api
